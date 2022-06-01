@@ -77,13 +77,13 @@ class TestLogRotate:
                               ("TC2", "10K", False),
                               ("TC3", "8M", False)])
     def test_logrotate(self, setup, step, size, expected):
-        steps = {
-            "TC1": "Checks if logrotate works when the log size is over the threshold",
-            "TC2": "Checks if logrotate doesn't work when the log size is small",
-            "TC3": "Checks if logrotate doesn't work when the log size is half of the threshold",
-        }
+        """
+            TC1: Checks if logrotate works when the log size is over the threshold,
+            TC2: Checks if logrotate doesn't work when the log size is small,
+            TC3: Checks if logrotate doesn't work when the log size is half of the threshold,
+        """
         with DisableLogrotateCronContext(self.duthost):
-            with allure.step(steps[step]):
+            with allure.step("Running {}".format(step)):
                 original_log_size = self.get_log_size()
                 logger.info("{} original size is {} bytes".format(self.log_path, original_log_size))
                 self.set_log_size(size)
