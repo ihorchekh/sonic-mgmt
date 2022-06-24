@@ -31,6 +31,13 @@ pytestmark = [
 vlan_tagging_mode = ""
 
 @pytest.fixture(scope='module', autouse=True)
+def skip_old_branch_for_scaled_test(duthost, request):
+    if duthost.sonic_release in ["201811", "201911", "202012", "202106", "202111"] \
+            and request.config.option.num_vnet > 8 \
+            and request.config.option.num_routes > 3000:
+        pytest.skip("The scaled test with more than 3k routes isn't supported on {} and other legacy branches.".format(duthost.sonic_release))
+
+@pytest.fixture(scope='module', autouse=True)
 def load_minigraph_after_test(rand_selected_dut):
     """
     Restore config_db as vnet with wram-reboot will write testing config into
